@@ -103,7 +103,6 @@ def test_get_example_from_prop_spec(swagger_parser):
     # definition
     del prop_spec['items']['type']
     prop_spec['items']['$ref'] = '#/definitions/Tag'
-
     assert swagger_parser.get_example_from_prop_spec(prop_spec) == [{'id': 42, 'name': 'string'}]
 
     # Inline complex
