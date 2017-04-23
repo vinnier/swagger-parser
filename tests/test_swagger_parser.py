@@ -103,6 +103,7 @@ def test_get_example_from_prop_spec(swagger_parser):
     # definition
     del prop_spec['items']['type']
     prop_spec['items']['$ref'] = '#/definitions/Tag'
+
     assert swagger_parser.get_example_from_prop_spec(prop_spec) == [{'id': 42, 'name': 'string'}]
 
     # Inline complex
@@ -122,8 +123,43 @@ def test_get_example_from_prop_spec(swagger_parser):
       'required': ['error'],
     }
     example = swagger_parser.get_example_from_prop_spec(prop_spec)
-    assert example == [{'error': {'code': 'string', 'detail': 'string', 'title': 'string'}}]
+    assert example == {'error': {'code': 'string', 'detail': 'string', 'title': 'string'}}
 
+def test_build_definitions_example_map_with_list_values(swagger_maps_parser):
+    swagger_maps_parser.build_definitions_example()
+    example = swagger_maps_parser.definitions_example
+
+    expected_example = {
+        'Friend': { 'status': 'string' },
+        'FriendList': [{'status': 'string'}],
+        'Pet': { 'name': 'string' },
+        'PetList': [{'name': 'string'}],
+        'Result': {
+            'friends': [{'status': 'string'}],
+            'pets': [{'name': 'string'}]
+        }
+    }
+    assert example == expected_example
+
+    expected_result = {
+        'friends': [{ 'status': 'string' }],
+        'pets': [{ 'name': 'string' }]
+    }
+
+    pets1 = swagger_maps_parser.get_path_spec('/pets1')
+    pets1_path_spec = pets1[1]['get']['responses']['200']
+    pets1_example_result = swagger_maps_parser.get_example_from_prop_spec(pets1_path_spec)
+    assert pets1_example_result == expected_result
+
+    pets2 = swagger_maps_parser.get_path_spec('/pets2')
+    pets2_path_spec = pets2[1]['get']['responses']['200']
+    pets2_example_result = swagger_maps_parser.get_example_from_prop_spec(pets2_path_spec)
+    assert pets2_example_result == expected_result
+
+    pets3 = swagger_maps_parser.get_path_spec('/pets3')
+    pets3_path_spec = pets3[1]['get']['responses']['200']
+    pets3_example_result = swagger_maps_parser.get_example_from_prop_spec(pets3_path_spec)
+    assert pets3_example_result == expected_result
 
 def test_get_example_from_prop_spec_with_additional_properties(swagger_parser):
     prop_spec = {

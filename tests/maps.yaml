@@ -1,0 +1,80 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Test
+  license:
+    name: MIT
+produces:
+  - application/json
+paths:
+  /pets1:
+    get:
+      operationId: api.pets.listPets1
+      responses:
+        "200":
+          description: An paged array of pets and friends
+          schema:
+            $ref : '#/definitions/Result'
+  /pets2:
+    get:
+      operationId: api.pets.listPets2
+      responses:
+        "200":
+          description: An paged array of pets and friends
+          schema:
+            type: object
+            properties:
+              pets:
+                $ref: '#/definitions/PetList'
+              friends:
+                $ref: '#/definitions/FriendList'
+
+  /pets3:
+    get:
+      operationId: api.pets.listPets3
+      responses:
+        "200":
+          description: An paged array of pets and friends
+          schema:
+            type: object
+            properties:
+              pets:
+                type: array
+                items:
+                  $ref: '#/definitions/Pet'
+              friends:
+                type: array
+                items:
+                  $ref: '#/definitions/Friend'
+definitions:
+  Pet:
+    type: object
+    required: [name]
+    properties:
+      name:
+        type: string   
+  PetList:
+    type: array
+    items:
+      $ref: '#/definitions/Pet'     
+  Friend:
+    type: object
+    required: [status]
+    properties:
+      status:
+        type: string
+  FriendList:
+    type: array
+    items:
+      $ref: '#/definitions/Friend'
+  Result:
+    type: object
+    properties:
+      pets:
+        type: array
+        items:
+          $ref: '#/definitions/Pet'
+      friends:
+        type: array
+        items:
+          $ref: '#/definitions/Friend'

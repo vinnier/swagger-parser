@@ -133,3 +133,8 @@ def post_put_path_data():
 @pytest.fixture
 def swagger_array_parser():
     return SwaggerParser('tests/swagger_arrays.yaml')
+
+
+@pytest.fixture
+def swagger_maps_parser():
+    return SwaggerParser('tests/maps.yaml')

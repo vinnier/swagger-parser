@@ -177,9 +177,7 @@ class SwaggerParser(object):
         # Object - read from properties, without references
         if prop_spec['type'] == 'object':
             example, additional_properties = self._get_example_from_properties(prop_spec)
-            if additional_properties:
-                return example
-            return [example]
+            return example
         # Array
         if prop_spec['type'] == 'array' or (isinstance(prop_spec['type'], list) and prop_spec['type'][0] == 'array'):
             return self._example_from_array_spec(prop_spec)
@@ -237,8 +235,8 @@ class SwaggerParser(object):
             # While get_example_from_prop_spec is supposed to return a list,
             # we don't actually want that when recursing to build from
             # properties
-            if isinstance(partial, list):
-                partial = partial[0]
+            #if isinstance(partial, list):
+            #    partial = partial[0]
             example[inner_name] = partial
 
         return example, additional_property
@@ -382,7 +380,7 @@ class SwaggerParser(object):
                 if not isinstance(example_dict, dict):
                     return [example_dict]
                 if len(example_dict) == 1:
-                    return example_dict[list(example_dict.keys())[0]]
+                    return [example_dict]
                 else:
                     return_value = {}
                     for example_name, example_value in example_dict.items():
